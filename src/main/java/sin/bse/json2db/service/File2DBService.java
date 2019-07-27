@@ -70,4 +70,15 @@ public class File2DBService {
             return Collections.emptyList();
         }
 
+        public void json2db(List<ScripStaging> stagingList){
+            for(ScripStaging scripStaging:stagingList){
+                insertIntoScripStaging(scripStaging);
+            }
+        }
+
+    public ScripStaging insertIntoScripStaging(ScripStaging scripStaging) {
+       ScripStaging savedScript = repository.save(scripStaging);
+        return savedScript;
+    }
+
     }
