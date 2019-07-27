@@ -37,6 +37,7 @@ public class File2DBServiceTest {
             List<ScripStaging> scripList = file2DBService.getScripList(file2DBService.readJsonFile(jsonFile));
             for(ScripStaging scripStaging:scripList){
                 log.info(scripStaging.getScripname());
+                file2DBService.json2db(scripList);
             }
         }
     }
