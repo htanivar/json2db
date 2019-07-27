@@ -10,7 +10,11 @@ import sin.bse.json2db.model.TableRoot;
 import sin.bse.json2db.repository.IScripStaging;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -26,6 +30,7 @@ public class File2DBService {
 
     /**
      * Get all the files from the path
+     *
      * @param jsonSrcFolder
      * @return
      */
@@ -33,4 +38,36 @@ public class File2DBService {
         File folder = new File(jsonSrcFolder);
         return Arrays.asList(folder.listFiles());
     }
-}
+
+    public String readJsonFile(File jsonFilePath) {
+        String returnString=null;
+        ClassLoader classLoader = getClass().getClassLoader();
+        try  {
+            returnString = new String(Files.readAllBytes(jsonFilePath.toPath()));
+        } catch (NoSuchFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return returnString;
+    }
+        /**
+         * Pass input string from downloaded Json File and you will get the List of Scrip for staging
+         * @param jsonString
+         * @return
+         * @throws Exception
+         */
+        public List<ScripStaging> getScripList (String jsonString) throws Exception {
+            TableRoot tableRoot = null;
+            if(!jsonString.isEmpty()){
+                tableRoot = gson.fromJson(jsonString, TableRoot.class);
+            }
+            if(null!=tableRoot){
+                if (tableRoot.getTable().size() > 0) {
+                    return tableRoot.getTable();
+                }
+            }
+            return Collections.emptyList();
+        }
+
+    }
