@@ -14,16 +14,13 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class File2DBServiceTest {
 
 
     @Autowired
     private File2DBService file2DBService;
-
-//    Creating the instance manually work
-//    private File2DBService file2DBService =new File2DBService();
-
 
     @Test
     public void getJsonFiles() {
