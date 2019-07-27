@@ -14,7 +14,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest
 public class Json2dbApplicationTests {
 
