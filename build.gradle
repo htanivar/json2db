@@ -36,7 +36,10 @@ dependencies {
     testCompile group: 'org.mockftpserver', name: 'MockFtpServer', version: '2.7.1'
     compile group: 'org.springframework.integration', name: 'spring-integration-ftp', version: '5.1.6.RELEASE'
     compile group: 'com.google.code.gson', name: 'gson'
-
-
-    
 }
+
+//def profile = 'local'
+//
+//bootRun{
+//    args = ["--spring.profile.active="+profile]
+//}
