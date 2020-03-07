@@ -17,12 +17,14 @@ import sin.bse.json2db.model.ScripStaging;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 //@SpringBootTest
@@ -113,16 +115,11 @@ public class File2DBServiceTest {
 
     @Test
     public void getJsonFiles_UT() {
-        ClassLoader classLoader = getClass().getClassLoader();
-        try (InputStream inputStream = classLoader.getResourceAsStream("jsonPath")) {
-
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Unable to read file");
-        }
-        List<File> collect = file2DBService.getJsonFiles("src/test/resources/jsonPath")
+        List<File> testResult = file2DBService.getJsonFiles("src/test/resources/jsonPath")
                 .stream()
                 .peek(System.out::println)
                 .collect(Collectors.toList());
+        assertThat(testResult.size(), is(3));
     }
 
     private List<String> getDirectoriesFromFTPServer(FTPClient client, String dirLocation) throws IOException {
