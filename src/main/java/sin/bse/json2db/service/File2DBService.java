@@ -51,23 +51,25 @@ public class File2DBService {
         }
         return returnString;
     }
-        /**
-         * Pass input string from downloaded Json File and you will get the List of Scrip for staging
-         * @param jsonString
-         * @return
-         * @throws Exception
-         */
-        public List<ScripStaging> getScripList (String jsonString) throws Exception {
-            TableRoot tableRoot = null;
-            if(!jsonString.isEmpty()){
-                tableRoot = gson.fromJson(jsonString, TableRoot.class);
+
+    /**
+     * Pass input string from downloaded Json File and you will get the List of Scrip for staging
+     *
+     * @param jsonString
+     * @return
+     * @throws Exception
+     */
+    public List<ScripStaging> getScripList(String jsonString) {
+        TableRoot tableRoot = null;
+        if (!jsonString.isEmpty()) {
+            tableRoot = gson.fromJson(jsonString, TableRoot.class);
+        }
+        if (null != tableRoot) {
+            if (tableRoot.getTable().size() > 0) {
+                return tableRoot.getTable();
             }
-            if(null!=tableRoot){
-                if (tableRoot.getTable().size() > 0) {
-                    return tableRoot.getTable();
-                }
-            }
-            return Collections.emptyList();
+        }
+        return Collections.emptyList();
         }
 
         public void json2db(List<ScripStaging> stagingList){
