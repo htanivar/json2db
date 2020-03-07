@@ -88,7 +88,9 @@ public class File2DBServiceTest {
             List<String> directoriesFromFTPServer = getDirectoriesFromFTPServer(client, "/home/ravi");
             for (String ftpDir : directoriesFromFTPServer) {
                 log.info("found directory: {}", ftpDir);
-                List<FTPFile> filesFromFTPServer = getFilesFromFTPServer(client, ftpDir);
+                getFilesFromFTPServer(client, ftpDir)
+                        .stream()
+                        .forEach(System.out::println);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -112,10 +114,8 @@ public class File2DBServiceTest {
                 ret.add(dirLocation.concat("/").concat(dir.getName()));
             }
         }
-
         return ret;
     }
-
 
     private List<FTPFile> getFilesFromFTPServer(FTPClient client, String dirLocation) throws IOException {
         if (client.changeWorkingDirectory(dirLocation))
