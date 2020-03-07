@@ -4,41 +4,49 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import sin.bse.json2db.model.ScripStaging;
 
-import javax.annotation.Resource;
 import java.io.File;
-import java.io.InputStream;
-import java.nio.file.NoSuchFileException;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+
 @Slf4j
+@SpringBootTest
+@RunWith(SpringRunner.class)
 public class File2DBServiceTest {
-
-
 
     @Autowired
     private File2DBService file2DBService;
 
     @Test
-    public void getJsonFiles() throws Exception {
+    public void getJsonFiles_success_UT() {
+        List<File> testResult = file2DBService.getJsonFiles("src/test/resources/jsonPath")
+                .stream()
+                .peek(System.out::println)
+                .collect(Collectors.toList());
+        assertThat(testResult.size(), is(3));
+    }
 
-        ClassLoader classLoader = getClass().getClassLoader();
-        String jsonPath = classLoader.getResource("jsonPath").getPath();
-        List<File> jsonFiles = file2DBService.getJsonFiles(jsonPath);
-        for(File jsonFile: jsonFiles){
-            List<ScripStaging> scripList = file2DBService.getScripList(file2DBService.readJsonFile(jsonFile));
-            for(ScripStaging scripStaging:scripList){
-                log.info(scripStaging.getScripname());
-                file2DBService.json2db(scripList);
-            }
+    @Test(expected = IllegalArgumentException.class)
+    public void getJsonFiles_checkExceptionThown_UT() {
+        List<File> testResult = file2DBService.getJsonFiles("i/dont/exist")
+                .stream()
+                .peek(System.out::println)
+                .collect(Collectors.toList());
+    }
+
+    @Test
+    public void loadDb_UT() {
+        List<File> jsonFiles = file2DBService.getJsonFiles("src/test/resources/jsonPath");
+
+        for (File jsonFile : jsonFiles) {
+            file2DBService.loadDb(jsonFile);
         }
     }
+
 }
