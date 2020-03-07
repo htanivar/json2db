@@ -28,6 +28,7 @@ public class DBLoadController {
         List<File> jsonFiles = file2DBService.getJsonFiles(jsonPath);
         for(File jsonFile: jsonFiles){
             List<ScripStaging> scripList = file2DBService.getScripList(file2DBService.readJsonFile(jsonFile));
+            log.info("picked file: {}", jsonFile.getName());
             for(ScripStaging scripStaging:scripList){
                 log.info(scripStaging.getScripname());
                 file2DBService.json2db(scripList);
