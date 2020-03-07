@@ -39,4 +39,14 @@ public class File2DBServiceTest {
                 .peek(System.out::println)
                 .collect(Collectors.toList());
     }
+
+    @Test
+    public void loadDb_UT() {
+        List<File> jsonFiles = file2DBService.getJsonFiles("src/test/resources/jsonPath");
+
+        for (File jsonFile : jsonFiles) {
+            file2DBService.loadDb(jsonFile);
+        }
+    }
+
 }

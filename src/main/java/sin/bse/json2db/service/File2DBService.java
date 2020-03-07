@@ -2,6 +2,7 @@ package sin.bse.json2db.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,6 +82,24 @@ public class File2DBService {
     public ScripStaging insertIntoScripStaging(ScripStaging scripStaging) {
         ScripStaging savedScript = repository.save(scripStaging);
         return savedScript;
+    }
+
+    public boolean loadDb(File jsonFile) {
+        boolean ret = false;
+        try {
+            String s = new String(Files.readAllBytes(jsonFile.toPath()));
+            TableRoot tableRoot = gson.fromJson(new String(Files.readAllBytes(jsonFile.toPath())), TableRoot.class);
+            ScripStaging[] scripStagings = tableRoot.getTable().stream().toArray(ScripStaging[]::new);
+            for (ScripStaging scriptStaging : scripStagings) {
+                log.info("Script: {}", scriptStaging);
+            }
+        } catch (JsonSyntaxException je) {
+            throw new JsonSyntaxException("Unable to parse file " + jsonFile.getName() + " against class ScripStaging");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("unable to load file");
+        }
+        return ret;
     }
 
 }

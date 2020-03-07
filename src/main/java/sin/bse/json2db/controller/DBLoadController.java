@@ -30,6 +30,7 @@ public class DBLoadController {
             List<ScripStaging> scripList = null;
             scripList = file2DBService.getScripList(file2DBService.readJsonFile(jsonFile));
 
+
             log.info("picked file: {}", jsonFile.getName());
             for (ScripStaging scripStaging : scripList) {
                 log.info(scripStaging.getScripname());
