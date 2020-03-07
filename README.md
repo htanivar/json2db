@@ -14,7 +14,7 @@ Rest controller end point.
 ### Project Execution Steps
 1. Get the source code in your local machine
 1. Navigate to the location of the build.gradle file
-1. Run: gradle bootRun --args='--spring.profiles.active=local
+1. Run: gradle bootRun --args='--spring.profiles.active=local'
 
 ### Project Navigation (Make sure port 8090 is not used)
 1.  [Swagger UI](localhost:8090/swagger-ui.html) --> localhost:8090/swagger-ui.html
