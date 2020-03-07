@@ -80,10 +80,14 @@ public class File2DBServiceTest {
 
         FTPClient client = new FTPClient();
         try {
+            log.info("attempt to connecto to localhost:2727");
             client.connect("localhost", 2727);
+            log.info("attempt to login as user 'ravi'");
             client.login("ravi", "ravi");
+            log.info("attempt to retrive folders from /home/ravi");
             List<String> directoriesFromFTPServer = getDirectoriesFromFTPServer(client, "/home/ravi");
             for (String ftpDir : directoriesFromFTPServer) {
+                log.info("found directory: {}", ftpDir);
                 List<FTPFile> filesFromFTPServer = getFilesFromFTPServer(client, ftpDir);
             }
         } catch (IOException ex) {
@@ -91,6 +95,7 @@ public class File2DBServiceTest {
         } finally {
             if (client.isConnected()) {
                 try {
+                    log.info("attempt to disconnect from server'");
                     client.disconnect();
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -103,8 +108,8 @@ public class File2DBServiceTest {
     private List<String> getDirectoriesFromFTPServer(FTPClient client, String dirLocation) throws IOException {
         List<String> ret= new ArrayList<>();
         if(client.changeWorkingDirectory(dirLocation)){
-            for (FTPFile dir : Arrays.asList(client.listDirectories())) {
-                ret.add(dirLocation.concat("/").concat(dir.getName())) ;
+            for (FTPFile dir : client.listDirectories()) {
+                ret.add(dirLocation.concat("/").concat(dir.getName()));
             }
         }
 
