@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockftpserver.fake.FakeFtpServer;
@@ -59,6 +60,7 @@ public class File2DBServiceTest {
         fakeFtpServer.start();
     }
 
+    @Ignore
     @Test
     public void getJsonFilesFromResource() throws Exception {
 
