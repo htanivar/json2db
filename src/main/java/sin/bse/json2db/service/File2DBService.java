@@ -36,13 +36,15 @@ public class File2DBService {
      */
     public List<File> getJsonFiles(String jsonSrcFolder) {
         File folder = new File(jsonSrcFolder);
+        if (!folder.exists())
+            throw new IllegalArgumentException("No folders found in " + jsonSrcFolder);
         return Arrays.asList(folder.listFiles());
     }
 
     public String readJsonFile(File jsonFilePath) {
-        String returnString=null;
+        String returnString = null;
         ClassLoader classLoader = getClass().getClassLoader();
-        try  {
+        try {
             returnString = new String(Files.readAllBytes(jsonFilePath.toPath()));
         } catch (NoSuchFileException e) {
             e.printStackTrace();
@@ -70,17 +72,17 @@ public class File2DBService {
             }
         }
         return Collections.emptyList();
-        }
+    }
 
-        public void json2db(List<ScripStaging> stagingList){
-            for(ScripStaging scripStaging:stagingList){
-                insertIntoScripStaging(scripStaging);
-            }
+    public void json2db(List<ScripStaging> stagingList) {
+        for (ScripStaging scripStaging : stagingList) {
+            insertIntoScripStaging(scripStaging);
         }
+    }
 
     public ScripStaging insertIntoScripStaging(ScripStaging scripStaging) {
-       ScripStaging savedScript = repository.save(scripStaging);
+        ScripStaging savedScript = repository.save(scripStaging);
         return savedScript;
     }
 
-    }
+}

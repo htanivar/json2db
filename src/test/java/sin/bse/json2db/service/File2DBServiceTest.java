@@ -12,27 +12,28 @@ import org.mockftpserver.fake.UserAccount;
 import org.mockftpserver.fake.filesystem.DirectoryEntry;
 import org.mockftpserver.fake.filesystem.FileEntry;
 import org.mockftpserver.fake.filesystem.UnixFakeFileSystem;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import sin.bse.json2db.model.ScripStaging;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+//@SpringBootTest
 @Slf4j
 public class File2DBServiceTest {
 
-    @Autowired
-    private File2DBService file2DBService;
+
+    private File2DBService file2DBService = new File2DBService();
 
     private FakeFtpServer fakeFtpServer = new FakeFtpServer();
+
 
     @Before
     public void setupFtpServer() {
@@ -107,6 +108,21 @@ public class File2DBServiceTest {
             }
         }
 
+    }
+
+
+    @Test
+    public void getJsonFiles_UT() {
+        ClassLoader classLoader = getClass().getClassLoader();
+        try (InputStream inputStream = classLoader.getResourceAsStream("jsonPath")) {
+
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Unable to read file");
+        }
+        List<File> collect = file2DBService.getJsonFiles("src/test/resources/jsonPath")
+                .stream()
+                .peek(System.out::println)
+                .collect(Collectors.toList());
     }
 
     private List<String> getDirectoriesFromFTPServer(FTPClient client, String dirLocation) throws IOException {
