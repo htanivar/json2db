@@ -20,4 +20,5 @@ Rest controller end point.
 1. Create the Domain object --> **Done**
 1. Read the a file from test/resources/jsonPath/test.json as Json String --> **Done**
 1. Map the Json string to Domain Object and Save the Domain Object to Database --> **Done**
-1. Add controller to read static files and load into DB
+1. Add controller to read static files and load into DB  --> **Done**
+1. Add Swagger to project
