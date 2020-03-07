@@ -19,7 +19,7 @@ public class DBLoadController {
 
     /**
      * Expected to fetch the files from test \src\test\resources\jsonPath
-     * And load the data into local H2 Database (localhost:<port>/h2-console)
+     * And load the data into local H2 Database (localhost:<port>/json2db)
      */
     @GetMapping("/localtest")
     public String localTest() throws Exception {
