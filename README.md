@@ -13,6 +13,10 @@ Rest controller end point.
 1. Navigate to the location of the build.gradle file
 1. 
 
+### Project Navigation (Make sure port 8090 is not used)
+1.  [Swagger UI](localhost:8090/swagger-ui.html)
+1.  [H2 Database](localhost:8090/json2db)
+
 
 
 ## Project Development Tasks
