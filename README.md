@@ -14,8 +14,8 @@ Rest controller end point.
 1. 
 
 ### Project Navigation (Make sure port 8090 is not used)
-1.  [Swagger UI](localhost:8090/swagger-ui.html)
-1.  [H2 Database](localhost:8090/json2db)
+1.  [Swagger UI](localhost:8090/swagger-ui.html) --> localhost:8090/swagger-ui.html
+1.  [H2 Database](localhost:8090/json2db) --> localhost:8090/json2db
 
 
 
