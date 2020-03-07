@@ -21,8 +21,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class File2DBService {
-
-
     @Autowired
     private IScripStaging repository;
 
