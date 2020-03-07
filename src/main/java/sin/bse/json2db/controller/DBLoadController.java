@@ -40,4 +40,26 @@ public class DBLoadController {
         return "Local test is complete..check data in H2 Database";
     }
 
+    /**
+     * STILL UNDER DEVELOPMENT
+     * Expected to load the database
+     *
+     * @param pathString
+     * @return
+     */
+    @GetMapping("/loaddb")
+    public String loadDatabase(String pathString) {
+        if (pathString == null)
+            pathString = jsonPath;
+
+        try {
+            List<File> jsonFiles = loadDatabaseService.getJsonFiles(pathString);
+            for (File jsonFile : jsonFiles) {
+                loadDatabaseService.loadDb(jsonFile);
+            }
+        } catch (Exception e) {
+            log.error("Unable to load database, look into log files", new IllegalArgumentException("check the files in path " + pathString));
+        }
+        return "Files from : " + pathString + " is loaded into Database";
+    }
 }
