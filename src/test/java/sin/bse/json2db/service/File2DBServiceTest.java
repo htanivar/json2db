@@ -106,8 +106,8 @@ public class File2DBServiceTest {
     }
 
     private List<String> getDirectoriesFromFTPServer(FTPClient client, String dirLocation) throws IOException {
-        List<String> ret= new ArrayList<>();
-        if(client.changeWorkingDirectory(dirLocation)){
+        List<String> ret = new ArrayList<>();
+        if (client.changeWorkingDirectory(dirLocation)) {
             for (FTPFile dir : client.listDirectories()) {
                 ret.add(dirLocation.concat("/").concat(dir.getName()));
             }
@@ -118,10 +118,8 @@ public class File2DBServiceTest {
 
 
     private List<FTPFile> getFilesFromFTPServer(FTPClient client, String dirLocation) throws IOException {
-        if(client.changeWorkingDirectory(dirLocation))
-        {
+        if (client.changeWorkingDirectory(dirLocation))
             return Arrays.asList(client.listFiles());
-        }
         return Collections.emptyList();
     }
 }
