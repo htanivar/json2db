@@ -2,10 +2,12 @@ package sin.bse.json2db.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sin.bse.json2db.model.ScripStaging;
 import sin.bse.json2db.service.File2DBService;
+import sin.bse.json2db.service.LoadDatabaseService;
 
 import java.io.File;
 import java.util.List;
@@ -16,6 +18,12 @@ public class DBLoadController {
 
     @Autowired
     private File2DBService file2DBService;
+
+    @Autowired
+    private LoadDatabaseService loadDatabaseService;
+
+    @Value("${json.path:jsonPath}")
+    private String jsonPath;
 
     /**
      * Expected to fetch the files from test \src\test\resources\jsonPath
@@ -49,6 +57,7 @@ public class DBLoadController {
      */
     @GetMapping("/loaddb")
     public String loadDatabase(String pathString) {
+
         if (pathString == null)
             pathString = jsonPath;
 
