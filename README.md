@@ -9,7 +9,8 @@ Rest controller end point.
 1. Acceptance to run the project with default local profile
 
 ### ISSUE in Execution
-1. Unable to run *_WRONG gradle build_*
+1. Unable to run *_gradle build_*
+1. default jsonPath in DBLoadController.java needs to be fixed[work around run localtest]
 
 ### Project Execution Steps
 1. Get the source code in your local machine
