@@ -29,11 +29,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
-    compile 'org.projectlombok:lombok:1.18.8'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
 
-//    runtimeOnly 'mysql:mysql-connector-java'
+    compileOnly 'org.projectlombok:lombok:1.18.8'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.8'
+    testCompile 'org.projectlombok:lombok:1.18.8'
+    testImplementation 'org.projectlombok:lombok:1.18.8'
+
+//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile 'com.h2database:h2'
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.5.4'
