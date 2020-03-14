@@ -64,11 +64,15 @@ public class DBLoadController {
         try {
             List<File> jsonFiles = loadDatabaseService.getJsonFiles(pathString);
             for (File jsonFile : jsonFiles) {
-                loadDatabaseService.loadDb(jsonFile);
+                if (jsonFile.length() > 0)
+                    loadDatabaseService.loadDb(jsonFile);
             }
+            log.info("Load Completed");
+            return "Files from : " + pathString + " is loaded into Database";
         } catch (Exception e) {
-            log.error("Unable to load database, look into log files", new IllegalArgumentException("check the files in path " + pathString));
+            log.error("Unable to load database, look into log files", new IllegalArgumentException("check the files in path " + pathString),e);
         }
-        return "Files from : " + pathString + " is loaded into Database";
+
+        return "Controller Exiting";
     }
 }
