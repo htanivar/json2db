@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -33,24 +34,17 @@ public class LoadDatabaseService {
 
     private final Gson gson = new GsonBuilder().create();
 
-    /**
-     * Get all the files from the path
-     *
-     * @param jsonSrcFolder
-     * @return
-     */
     public List<File> getJsonFiles(String jsonSrcFolder) {
         File folder = new File(jsonSrcFolder);
         if (!folder.exists())
             throw new IllegalArgumentException("No folders found in " + jsonSrcFolder+" Please provide the json folder location in spring property file");
-        return Arrays.asList(folder.listFiles())
+        return Arrays.asList(Objects.requireNonNull(folder.listFiles()))
                 .stream()
                 .filter(e -> e.getName().endsWith(".json"))
                 .collect(Collectors.toList());
     }
 
-
-    public boolean loadDb(File jsonFile) {
+    public void loadDb(File jsonFile) {
         boolean ret = false;
         log.info("processing fileSize {} fileName: {}", jsonFile.length(), jsonFile.getName());
         try {
@@ -61,10 +55,8 @@ public class LoadDatabaseService {
         } catch (JsonSyntaxException je) {
             throw new JsonSyntaxException("Unable to parse file " + jsonFile.getName() + " against class ScripStaging");
         } catch (Exception e) {
-            log.error("Error thrown ", e);
-            throw new IllegalArgumentException("unable to load file");
+            throw new IllegalArgumentException("unable to load file",e);
         }
-        return ret;
     }
 
     private List<ScripStaging> getScripStagingsList(TableRoot tableRoot) {

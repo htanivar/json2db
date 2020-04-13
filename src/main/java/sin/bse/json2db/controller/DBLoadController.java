@@ -1,41 +1,46 @@
 package sin.bse.json2db.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sin.bse.json2db.model.ScripStaging;
+import sin.bse.json2db.service.ArchiveValidationService;
 import sin.bse.json2db.service.File2DBService;
 import sin.bse.json2db.service.LoadDatabaseService;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @Slf4j
 public class DBLoadController {
 
-    @Autowired
-    private File2DBService file2DBService;
+    private final ArchiveValidationService archiveValidationService;
 
-    @Autowired
-    private LoadDatabaseService loadDatabaseService;
+    private final File2DBService file2DBService;
+
+    private final LoadDatabaseService loadDatabaseService;
 
     @Value("${json.path:jsonPath}")
     private String jsonPath;
 
-    /**
-     * Expected to fetch the files from test \src\test\resources\jsonPath
-     * And load the data into local H2 Database (localhost:<port>/json2db)
-     */
+    @Value("${json.archive.path}")
+    private String jsonArchivePath;
+
+    public DBLoadController(ArchiveValidationService archiveValidationService, File2DBService file2DBService, LoadDatabaseService loadDatabaseService) {
+        this.archiveValidationService = archiveValidationService;
+        this.file2DBService = file2DBService;
+        this.loadDatabaseService = loadDatabaseService;
+    }
+
     @GetMapping("/localtest")
     public String localTest() {
-        ClassLoader classLoader = getClass().getClassLoader();
-        String jsonPath = classLoader.getResource("jsonPath").getPath();
-        List<File> jsonFiles = file2DBService.getJsonFiles(jsonPath);
-        for (File jsonFile : jsonFiles) {
-            List<ScripStaging> scripList = null;
+        if (!validation())
+            return "Somethig is wrong!!! Check the logs";
+        for (File jsonFile : getJsonResourceFiles()) {
+            List<ScripStaging> scripList;
             scripList = file2DBService.getScripList(file2DBService.readJsonFile(jsonFile));
 
 
@@ -44,20 +49,15 @@ public class DBLoadController {
                 log.info(scripStaging.getScripname());
                 file2DBService.json2db(scripList);
             }
+            archiveValidationService.archiveProcessedJsonFile(jsonFile, jsonArchivePath);
         }
         return "Local test is complete..check data in H2 Database";
     }
 
-    /**
-     * STILL UNDER DEVELOPMENT
-     * Expected to load the database
-     *
-     * @param pathString
-     * @return
-     */
     @GetMapping("/loaddb")
     public String loadDatabase(String pathString) {
-
+        if (!validation())
+            return "Somethig is wrong!!! Check the logs";
         if (pathString == null)
             pathString = jsonPath;
 
@@ -66,13 +66,33 @@ public class DBLoadController {
             for (File jsonFile : jsonFiles) {
                 if (jsonFile.length() > 0)
                     loadDatabaseService.loadDb(jsonFile);
+                archiveValidationService.archiveProcessedJsonFile(jsonFile, jsonArchivePath);
             }
             log.info("Load Completed");
             return "Files from : " + pathString + " is loaded into Database";
         } catch (Exception e) {
-            log.error("Unable to load database, look into log files", new IllegalArgumentException("check the files in path " + pathString),e);
+            log.error("Unable to load database, look into log files", new IllegalArgumentException("check the files in path " + pathString), e);
         }
 
         return "Controller Exiting";
+    }
+
+    private boolean validation() {
+        try {
+            if (!archiveValidationService.validateFolderExists(jsonPath))
+                log.error("Folder does not exist {}", jsonPath);
+            if (!archiveValidationService.validateFolderExists(jsonArchivePath))
+                log.error("Folder does not exist {}", jsonArchivePath);
+            return true;
+        } catch (Exception e) {
+            log.error("Unable to validate the folder locations");
+            throw new IllegalStateException("Check the folder structures for validation");
+        }
+    }
+
+    private List<File> getJsonResourceFiles() {
+        ClassLoader classLoader = getClass().getClassLoader();
+        String jsonResourcePath = Objects.requireNonNull(classLoader.getResource("jsonPath")).getPath();
+        return file2DBService.getJsonFiles(jsonResourcePath);
     }
 }
