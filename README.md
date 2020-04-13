@@ -23,6 +23,8 @@ Rest controller end point.
 1.  [Swagger UI](localhost:8090/swagger-ui.html) --> localhost:8090/swagger-ui.html
 1.  [H2 Database](localhost:8090/json2db) --> localhost:8090/json2db
 
+### How to run the project with required profile (with Gradle)
+SPRING_PROFILES_ACTIVE=local gradle clean bootRun
 
 
 ## Project Development Tasks
