@@ -45,7 +45,6 @@ public class LoadDatabaseService {
     }
 
     public void loadDb(File jsonFile) {
-        boolean ret = false;
         log.info("processing fileSize {} fileName: {}", jsonFile.length(), jsonFile.getName());
         try {
             TableRoot tableRoot = gson.fromJson(new String(Files.readAllBytes(jsonFile.toPath())), TableRoot.class);
