@@ -37,8 +37,7 @@ public class DBLoadController {
 
     @GetMapping("/localtest")
     public String localTest() {
-        if (!validation())
-            return "Somethig is wrong!!! Check the logs";
+        folderValidation();
         for (File jsonFile : getJsonResourceFiles()) {
             List<ScripStaging> scripList;
             scripList = file2DBService.getScripList(file2DBService.readJsonFile(jsonFile));
@@ -56,8 +55,7 @@ public class DBLoadController {
 
     @GetMapping("/loaddb")
     public String loadDatabase(String pathString) {
-        if (!validation())
-            return "Somethig is wrong!!! Check the logs";
+        folderValidation();
         if (pathString == null)
             pathString = jsonPath;
 
@@ -77,17 +75,14 @@ public class DBLoadController {
         return "Controller Exiting";
     }
 
-    private boolean validation() {
-        try {
-            if (!archiveValidationService.validateFolderExists(jsonPath))
-                log.error("Folder does not exist {}", jsonPath);
-            if (!archiveValidationService.validateFolderExists(jsonArchivePath))
-                log.error("Folder does not exist {}", jsonArchivePath);
-            return true;
-        } catch (Exception e) {
-            log.error("Unable to validate the folder locations");
-            throw new IllegalStateException("Check the folder structures for validation");
-        }
+    private void folderValidation() {
+            isFolderExists(jsonPath);
+            isFolderExists(jsonArchivePath);
+    }
+
+    private void isFolderExists(String jsonPath) {
+        if (!archiveValidationService.validateFolderExists(jsonPath))
+            log.error("Folder does not exist {}", jsonPath);
     }
 
     private List<File> getJsonResourceFiles() {
