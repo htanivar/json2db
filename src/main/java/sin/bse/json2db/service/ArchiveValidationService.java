@@ -21,13 +21,7 @@ public class ArchiveValidationService {
     private String fileSeperator;
 
     public boolean validateFolderExists(String inputFolder) {
-        File inputDir = new File(inputFolder);
-        if (inputDir.exists()) {
-            log.info("folder {} does exists", inputFolder);
-            return true;
-        } else {
-            throw new IllegalStateException("folder " + inputFolder + " does not exists");
-        }
+        return new File(inputFolder).exists();
     }
 
     public void archiveProcessedJsonFile(File jsonFile, String archiveFolder) {
